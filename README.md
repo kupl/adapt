@@ -19,7 +19,7 @@ $ docker build . --tag adapt
 ```
 
 ## Local Installation
-ADAPT uses [Tensorflow 2.0](https://www.tensorflow.org/). To install tensorflow 2.0, you need a ```pip>=19.0```.
+ADAPT uses [Tensorflow 2.0](https://www.tensorflow.org/). To install Tensorflow 2.0, you need a ```pip>=19.0```.
 The following commands will create a virtual environment and update ```pip``` with the Ubuntu machine.
 If you successfully create a virtual environment, your shell will be prefixed by ```(venv)```.
 *Updating system ```pip``` using ```pip``` can cause some [problems](https://github.com/pypa/pip/issues/5599), so using virtual enviroment is **highly recommended**.
