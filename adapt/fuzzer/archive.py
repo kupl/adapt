@@ -5,12 +5,12 @@ from imageio import imwrite
 from pathlib import Path
 import numpy as np
 
-def Archive(image, label, append='meta'):
+def Archive(input, label, append='meta'):
   '''Helper function for creating an archiving object.
 
   Args:
-    image: An initial image.
-    label: A label that the initial image classified into.
+    input: An initial input.
+    label: A label that the initial input classified into.
     append: An option that specifies the data that archive stores. Should be one
       of "meta" or "all". By default, "meta" will be used.
 
@@ -27,11 +27,11 @@ def Archive(image, label, append='meta'):
 
   # Return ArchiveMeta object.
   if append == 'meta':
-    return ArchiveMeta(image, label)
+    return ArchiveMeta(input, label)
 
   # Return ArchiveAll object.
   elif append == 'all':
-    return ArchiveAll(image, label)
+    return ArchiveAll(input, label)
   
   # Unknown append option.
   else:
@@ -41,19 +41,19 @@ def Archive(image, label, append='meta'):
 class ArchiveBase(ABC):
   '''A class for saving the result of testing (used as an implementation base).
   
-  This class will store the images, labels of them, and distances of them.
+  This class will store the inputs, labels of them, and distances of them.
   '''
 
-  def __init__(self, image, label):
+  def __init__(self, input, label):
     '''Create a archive.
     
     Args:
-      image: An initial image.
-      label: A label that the initial image classified into.
+      input: An initial input.
+      label: A label that the initial input classified into.
     '''
 
     # Save original properties.
-    self.image = np.array(image)
+    self.input = np.array(input)
     self.label = label
 
     # Create meta variables.
@@ -64,16 +64,16 @@ class ArchiveBase(ABC):
     self.found_labels = defaultdict(bool)
     self.distance = defaultdict(list)
 
-    # Storage for created images.
-    self.images = defaultdict(list)
+    # Storage for created inputs.
+    self.inputs = defaultdict(list)
 
-  def add(self, image, label, distance):
-    '''Add a newly found image.
+  def add(self, input, label, distance):
+    '''Add a newly found input.
     
     Args:
-      image: A newly found image.
-      label: A label that the newly found image classified into.
-      distance: A distance (e.g. l2 distance) from origianl image.
+      input: A newly found input.
+      label: A label that the newly found input classified into.
+      distance: A distance (e.g. l2 distance) from origianl input.
     '''
 
     # Update meta varaibles.
@@ -85,17 +85,17 @@ class ArchiveBase(ABC):
     self.found_labels[label] = True
     self.distance[label].append(distance)
 
-    self.append(image, label)
+    self.append(input, label)
 
   @abstractmethod
-  def append(self, image, label):
-    '''Append a created image.
+  def append(self, input, label):
+    '''Append a created input.
 
     *** This method should be implemented. ***
     
     Args:
-      image: A created image.
-      label: A label that the created image classified into.
+      input: A created input.
+      label: A label that the created input classified into.
     '''
 
   def summary(self, file=None):
@@ -108,7 +108,7 @@ class ArchiveBase(ABC):
     print('----------', file=file)
 
     # Print meta data of total.
-    print('Total images: {}'.format(self.total), file=file)
+    print('Total inputs: {}'.format(self.total), file=file)
     print('  Average distance: {}'.format(np.mean(np.concatenate([self.distance[label] for label in self.distance.keys()]))), file=file)
     
     # Print meta data of adversarials.
@@ -138,15 +138,15 @@ class ArchiveBase(ABC):
     
     print('----------', file=file)
 
-  def save_images(self, path, deprocess=None, prefix=None, lowest_distance=False):
-    '''Save images in the archive.
+  def save_inputs(self, path, deprocess=None, prefix=None, lowest_distance=False):
+    '''Save inputs in the archive.
 
-    This method will save images in the `path` folder. The file name will be set as
-    "{label of a found image}-{identifier number}" with the `prefix` in front of it.
+    This method will save inputs in the `path` folder. The file name will be set as
+    "{label of a found input}-{identifier number}" with the `prefix` in front of it.
 
     Args:
-      path: A folder to save images.
-      deprocess: deprocess function that applied before saving image. By default,
+      path: A folder to save inputs.
+      deprocess: deprocess function that applied before saving input. By default,
         use an identity function.
       prefix: A prefix of the file name. By default, "{original label}-" will
         be used.
@@ -169,25 +169,25 @@ class ArchiveBase(ABC):
       # If lowest distance.
       if lowest_distance:
         lowest = np.argmin(self.distance[label])
-        images = [self.images[label][lowest]]
+        inputs = [self.inputs[label][lowest]]
 
       # Else.
       else:
-        images = self.images[label]
+        inputs = self.inputs[label]
 
-      # Save images.
-      for i, img in enumerate(images):
+      # Save inputs.
+      for i, img in enumerate(inputs):
         imwrite(path / '{}{}-{}'.format(prefix, label, i), deprocess(img))
 
 class ArchiveMeta(ArchiveBase):
   '''An archive class that only stores meta data (label and distance)'''
 
-  def append(self, image, label):
-    '''Append a created image.
+  def append(self, input, label):
+    '''Append a created input.
 
     Args:
-      image: A created image.
-      label: A label that the created image classified into.
+      input: A created input.
+      label: A label that the created input classified into.
     '''
 
     # Do nothing.
@@ -195,13 +195,13 @@ class ArchiveMeta(ArchiveBase):
 class ArchiveAll(ArchiveBase):
   '''An archive class that only stores all data'''
 
-  def append(self, image, label):
-    '''Append a created image.
+  def append(self, input, label):
+    '''Append a created input.
 
     Args:
-      image: A created image.
-      label: A label that the created image classified into.
+      input: A created input.
+      label: A label that the created input classified into.
     '''
 
-    # Add the created image.
-    self.images[label].append(np.array(image))
+    # Add the created input.
+    self.inputs[label].append(np.array(input))

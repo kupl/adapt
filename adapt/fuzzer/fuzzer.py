@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import tensorflow.keras.backend as K
 
-from adapt import Network
+from adapt.network import Network
 from adapt.fuzzer.archive import Archive
 from adapt.metric import NeuronCoverage
 from adapt.strategy import RandomStrategy
@@ -15,10 +15,10 @@ class WhiteBoxFuzzer:
   
   White-box testing is a technique that utilizes internal values to generate
   inputs. This class will uses the gradients to generate next input for testing.
-  This fuzzer will test one image.
+  This fuzzer will test one input.
   '''
 
-  def __init__(self, network, image, metric=None, strategy=None, k=10, delta=0.2, class_weight=0.5, neuron_weight=0.5, lr=0.02, trail=3, decode=None):
+  def __init__(self, network, input, metric=None, strategy=None, k=10, delta=0.2, class_weight=0.5, neuron_weight=0.5, lr=0.1, trail=3, decode=None):
     '''Create a fuzzer.
     
     Create a white-box fuzzer. All parameters except for the time budget, should
@@ -26,7 +26,7 @@ class WhiteBoxFuzzer:
 
     Args:
       network: A wrapped Keras model with `adapt.Network`. Wrap if not wrapped.
-      image: An image to test.
+      input: An input to test.
       metric: A coverage metric for testing. By default, the fuzzer will use
         a neuron coverage with threshold 0.5.
       strategy: A neuron selection strategy. By default, the fuzzer will use
@@ -35,11 +35,11 @@ class WhiteBoxFuzzer:
       delta: A positive floating point number. Limits of distance of created
         inputs.
       class_weight: A floating point number. A weight for the class term in
-        optimization equation.
+        optimization equation. By default, use 0.5.
       neuron_weight: A floating point number. A weight for the neuron term in
-        optimization equation.
+        optimization equation. By default, use 0.5.
       lr: A floating point number. A learning rate to apply when generating
-        the next input using gradients.
+        the next input using gradients. By default, use 0.1.
       trail: A positive integer. Trails to apply one set of selected neurons.
       decode: A function that gets logits and return the label. By default,
         uses `np.argmax`.
@@ -53,7 +53,7 @@ class WhiteBoxFuzzer:
       network = Network(network)
     self.network = network
 
-    self.image = image
+    self.input = input
 
     if not metric:
       metric = NeuronCoverage(0.5)
@@ -113,15 +113,15 @@ class WhiteBoxFuzzer:
     '''
 
     # Get the original properties.
-    internals, logits = self.network.predict(np.array([self.image]))
+    internals, logits = self.network.predict(np.array([self.input]))
     orig_index = np.argmax(logits)
-    orig_norm = np.linalg.norm(self.image)
+    orig_norm = np.linalg.norm(self.input)
     self.label = self.decode(np.array([logits]))
-    self.orig_coverage = coverage(self.image)
+    self.orig_coverage = coverage(self.input)
 
     # Initialize variables.
     self.covered = self.metric(internals=internals, logits=logits)
-    self.archive = Archive(self.image, self.label, append=append)
+    self.archive = Archive(self.input, self.label, append=append)
     self.timestamp = []
 
     # Initialize the strategy.
@@ -136,13 +136,13 @@ class WhiteBoxFuzzer:
       while True:
 
         # Create worklist.
-        worklist = [tf.identity(np.array([self.image]))]
+        worklist = [tf.identity(np.array([self.input]))]
 
         # While worklist is not empty:
         while len(worklist) > 0:
 
-          # Get image
-          image = worklist.pop(0)
+          # Get input
+          input = worklist.pop(0)
 
           # Select neurons.
           neurons = self.strategy(k=self.k)
@@ -155,37 +155,37 @@ class WhiteBoxFuzzer:
 
             # Calculate gradients.
             with tf.GradientTape() as t:
-              t.watch(image)
-              internals, logits = self.network.predict(image)
+              t.watch(input)
+              internals, logits = self.network.predict(input)
               loss = self.neuron_weight * K.sum([internals[li][ni] for li, ni in neurons]) - self.class_weight * logits[orig_index]
-            dl_di = t.gradient(loss, image)
+            dl_di = t.gradient(loss, input)
 
-            # Generate the next image using gradients.
-            image += self.lr * dl_di
+            # Generate the next input using gradients.
+            input += self.lr * dl_di
 
-            # Get the properties of the generated image.
-            internals, logits = self.network.predict(image)
+            # Get the properties of the generated input.
+            internals, logits = self.network.predict(input)
 
             covered = self.metric(internals=internals, logits=logits)
             label = self.decode(np.array([logits]))
 
-            distance = np.linalg.norm(image - self.image) / orig_norm
+            distance = np.linalg.norm(input - self.input) / orig_norm
 
             # Update varaibles in fuzzer
             self.covered = np.bitwise_or(self.covered, covered)
 
-            new_cov = covered(self.covered)
+            new_cov = coverage(self.covered)
 
             # If coverage increased.
             if new_cov > orig_cov and distance < self.delta:
-              worklist.append(tf.identity(image))
+              worklist.append(tf.identity(input))
 
             # Feedback to strategy.
             self.strategy.update(covered=covered, label=label)
 
-            # Add created image.
-            self.archive.add(image, label, distance)
-            self.timestamp((timer.elapsed.total_seconds(), new_cov))
+            # Add created input.
+            self.archive.add(input, label, distance)
+            self.timestamp.append((timer.elapsed.total_seconds(), new_cov))
 
             # Check timeout
             timer.check_timeout()
@@ -196,8 +196,10 @@ class WhiteBoxFuzzer:
       print('Stopped by the user.')
 
     # Update meta variables.
-    self.coverage = coverage(self.image)
+    self.coverage = coverage(self.input)
     self.start_time = timer.start_time
     self.time_consumed = int(timer.elapsed.total_seconds())
+
+    print('Done!')
 
     return self.archive

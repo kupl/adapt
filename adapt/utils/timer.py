@@ -83,3 +83,5 @@ class Timer:
     >>> int(timer.elaped.total_seconds())
     13
     '''
+
+    return datetime.now() - self.start_time
