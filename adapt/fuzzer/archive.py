@@ -203,5 +203,5 @@ class ArchiveAll(ArchiveBase):
       label: A label that the created image classified into.
     '''
 
-    # Add created image.
+    # Add the created image.
     self.images[label].append(np.array(image))
