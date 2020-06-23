@@ -1,0 +1,17 @@
+# Git related files
+.git
+.gitignore
+
+# Markdown files
+**/*.md
+
+# Python complied files
+**/*.pyc
+**/__pycache__
+
+# Virtual environment
+venv
+
+# Packaging
+adapt.egg-info
+build
