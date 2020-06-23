@@ -41,4 +41,4 @@ To deactivate the virtual environment, type the following command. Then, ```(ven
 ```
 
 ## Issues
-We are welcome any issues. Please, leave it in the Issue tab.
+We are welcome any issues. Please, leave them in the Issue tab.
