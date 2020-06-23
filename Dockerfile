@@ -11,5 +11,5 @@ RUN pip install imageio --no-cache-dir
 COPY ./docker/bash.bashrc /etc/bash.bashrc
 
 # Set entry point.
-WORKDIR /workdir
+WORKDIR /workspace
 CMD bash
