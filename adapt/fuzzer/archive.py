@@ -120,6 +120,11 @@ class ArchiveBase(ABC):
     print('Total adversarials: {}'.format(self.adversarials), file=file)
     print('  Average distance: {}'.format('-' if self.adversarials == 0 else np.mean(np.concatenate([self.distance[label] for label in self.distance.keys() if label != self.label]))), file=file)
 
+    # Print coverages.
+    print('Coverage', file=file)
+    print('  Original: {}'.format(self.timestamp[0][1]))
+    print('  Achieved: {}'.format(self.timestamp[-1][1]))
+
     print('----------', file=file)
 
     # Print meta data for original label.
