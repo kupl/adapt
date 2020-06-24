@@ -17,6 +17,14 @@ Following command will create an image.
 ```bash
 $ docker build . --tag adapt
 ```
+To open a bash using the docker image, use the following command.
+```bash
+$ docker run -it -v $(pwd)/tutorial:/workspace -u $(id -u):$(id -g) adapt bash
+```
+If no commands are pass to docker, jupyter notebook server will be launched. The command will open a server at [http://localhost:8888/](http://localhost:8888).
+```bash
+$ docker run -v $(pwd)/tutorial:/workspace -u $(id -u):$(id -g) -p 8888:8888 adapt
+```
 
 ## Local Installation
 ADAPT uses [Tensorflow 2.0](https://www.tensorflow.org/). To install Tensorflow 2.0, you need a ```pip>=19.0```.
@@ -39,6 +47,25 @@ To deactivate the virtual environment, type the following command. Then, ```(ven
 ```
 (venv) $ deactivate
 ```
+
+### Jupyter notebook
+The following command will install jupyter notebook in your virtual environment.
+```bash
+(venv) $ pip install notebook
+```
+To launch jupyter notebook server, type the following command.
+```bash
+(venv) $ jupyter notebook
+```
+If your machine have jupyter notebook installed in system-wide, you can install a kernel with the following commands.
+```bash
+(venv) $ pip install -I ipykernel
+(venv) $ python -m ipykernel install --user --name ADAPT
+```
+Now, you can see the ```ADAPT``` entry when you create a new notebook.
+
+## Tutorial
+ADAPT offeres some tutorials at [tutorial](tutorial).
 
 ## Issues
 We are welcome any issues. Please, leave them in the Issue tab.
