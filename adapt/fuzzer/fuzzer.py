@@ -93,7 +93,6 @@ class WhiteBoxFuzzer:
     self.orig_coverage = None
     self.covered = None
     self.coverage = None
-    self.timestamp = None
 
   def start(self, hours=0, minutes=0, seconds=0, append='meta'):
     '''Start fuzzing for the given time budget.
@@ -117,12 +116,11 @@ class WhiteBoxFuzzer:
     orig_index = np.argmax(logits)
     orig_norm = np.linalg.norm(self.input)
     self.label = self.decode(np.array([logits]))
-    self.orig_coverage = coverage(self.input)
+    self.covered = self.metric(internals=internals, logits=logits)
+    self.orig_coverage = coverage(self.covered)
 
     # Initialize variables.
-    self.covered = self.metric(internals=internals, logits=logits)
     self.archive = Archive(self.input, self.label, append=append)
-    self.timestamp = []
 
     # Initialize the strategy.
     self.strategy = self.strategy.init(covered=self.covered, label=self.label)
@@ -184,8 +182,7 @@ class WhiteBoxFuzzer:
             self.strategy.update(covered=covered, label=label)
 
             # Add created input.
-            self.archive.add(input, label, distance)
-            self.timestamp.append((timer.elapsed.total_seconds(), new_cov))
+            self.archive.add(input, label, distance, timer.elapsed.total_seconds(), new_cov)
 
             # Check timeout
             timer.check_timeout()
@@ -196,7 +193,7 @@ class WhiteBoxFuzzer:
       print('Stopped by the user.')
 
     # Update meta variables.
-    self.coverage = coverage(self.input)
+    self.coverage = coverage(self.covered)
     self.start_time = timer.start_time
     self.time_consumed = int(timer.elapsed.total_seconds())
 

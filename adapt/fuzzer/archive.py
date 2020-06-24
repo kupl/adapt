@@ -67,7 +67,10 @@ class ArchiveBase(ABC):
     # Storage for created inputs.
     self.inputs = defaultdict(list)
 
-  def add(self, input, label, distance):
+    # Storate for coverages.
+    self.timestamp = []
+
+  def add(self, input, label, distance, time, coverage):
     '''Add a newly found input.
     
     Args:
@@ -86,6 +89,8 @@ class ArchiveBase(ABC):
     self.distance[label].append(distance)
 
     self.append(input, label)
+
+    self.timestamp.append((time, coverage))
 
   @abstractmethod
   def append(self, input, label):
