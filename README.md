@@ -60,7 +60,7 @@ To launch jupyter notebook server, type the following command.
 If your machine have jupyter notebook installed in system-wide, you can install a kernel with the following commands.
 ```bash
 (venv) $ pip install -I ipykernel
-(venv) $ python -m ipykernel install --user --name ADAPT
+(venv) $ python -m ipykernel install --user --name adapt --display-name ADAPT
 ```
 Now, you can see the ```ADAPT``` entry when you create a new notebook.
 
