@@ -4,11 +4,10 @@ from abc import abstractmethod
 class Metric(ABC):
   '''Abstract metric class (used as an implementation base).'''
 
-  @abstractmethod
   def __init__(self):
     '''Create a metric.
     
-    *** This method should be implemented. ***
+    *** This method could be updated, but not mandatory. ***
     '''
 
   def __call__(self, **kwargs):
