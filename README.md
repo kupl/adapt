@@ -68,4 +68,4 @@ Now, you can see the ```ADAPT``` entry when you create a new notebook.
 ADAPT offeres some tutorials at [tutorial](tutorial).
 
 ## Issues
-We are welcome any issues. Please, leave them in the Issue tab.
+We are welcome any issues. Please, leave them in the Issues tab.
