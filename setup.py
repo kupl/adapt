@@ -9,7 +9,7 @@ setup_params = dict(
   download_url='https://github.com/kupl/ADAPT',
   author='Software Analysis Laboratory, Korea University',
   license='MIT',
-  packages=find_packages(exclude=['docker', 'venv']),
+  packages=find_packages(exclude=['docker', 'tutorial', 'venv']),
   setup_requires=[], 
   install_requires=['tensorflow>=2.0.0', 'imageio'], 
   dependency_links=[],
