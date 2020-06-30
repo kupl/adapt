@@ -94,7 +94,7 @@ class WhiteBoxFuzzer:
     self.covered = None
     self.coverage = None
 
-  def start(self, hours=0, minutes=0, seconds=0, append='meta'):
+  def start(self, hours=0, minutes=0, seconds=0, append='meta', verbose=0):
     '''Start fuzzing for the given time budget.
 
     Start fuzzing for a time budget.
@@ -108,7 +108,9 @@ class WhiteBoxFuzzer:
         0 for the defalut value. If hours, minutes, and seconds are set to be 0,
         the time budget will automatically set to be 10 seconds.
       append: An option that specifies the data that archive stores. Should be one
-        of "meta" or "all". By default, "meta" will be used.
+        of "meta", "min_dist", or "all". By default, "meta" will be used.
+      verbose: An option that print out logs or not. Pass 1 for printing and 0 for
+        not printing. Be default, set to be 0.
     '''
 
     # Get the original properties.
@@ -127,7 +129,8 @@ class WhiteBoxFuzzer:
 
     # Set timer.
     timer = Timer(hours, minutes, seconds)
-    print('Fuzzing started. Press ctrl+c to quit.')
+    if verbose > 0:
+      print('Fuzzing started. Press ctrl+c to quit.')
 
     # Loop until timeout, or interrupted by user.
     try:
@@ -190,13 +193,15 @@ class WhiteBoxFuzzer:
     except Timeout:
       pass
     except KeyboardInterrupt:
-      print('Stopped by the user.')
+      if verbose > 0:
+        print('Stopped by the user.')
 
     # Update meta variables.
     self.coverage = coverage(self.covered)
     self.start_time = timer.start_time
     self.time_consumed = int(timer.elapsed.total_seconds())
 
-    print('Done!')
+    if verbose > 0:
+      print('Done!')
 
     return self.archive

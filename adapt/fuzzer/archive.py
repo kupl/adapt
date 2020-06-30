@@ -12,7 +12,7 @@ def Archive(input, label, append='meta'):
     input: An initial input.
     label: A label that the initial input classified into.
     append: An option that specifies the data that archive stores. Should be one
-      of "meta" or "all". By default, "meta" will be used.
+      of "meta", "min_dist", or "all". By default, "meta" will be used.
 
   Returns:
     An object created from ArchiveMeta if append is "meta", or an object creaed
@@ -32,6 +32,9 @@ def Archive(input, label, append='meta'):
   # Return ArchiveAll object.
   elif append == 'all':
     return ArchiveAll(input, label)
+
+  elif append == 'min_dist':
+    return ArchiveMinDist(input, label)
   
   # Unknown append option.
   else:
@@ -88,12 +91,12 @@ class ArchiveBase(ABC):
     self.found_labels[label] = True
     self.distance[label].append(distance)
 
-    self.append(input, label)
+    self.append(input, label, distance)
 
     self.timestamp.append((time, coverage))
 
   @abstractmethod
-  def append(self, input, label):
+  def append(self, input, label, dist):
     '''Append a created input.
 
     *** This method should be implemented. ***
@@ -101,6 +104,7 @@ class ArchiveBase(ABC):
     Args:
       input: A created input.
       label: A label that the created input classified into.
+      dist: A distance (e.g. l2 distance) from origianl input.
     '''
 
   def summary(self, file=None):
@@ -205,13 +209,51 @@ class ArchiveMeta(ArchiveBase):
 class ArchiveAll(ArchiveBase):
   '''An archive class that only stores all data'''
 
-  def append(self, input, label):
+  def append(self, input, label, dist):
     '''Append a created input.
 
     Args:
       input: A created input.
       label: A label that the created input classified into.
+      dist: A distance (e.g. l2 distance) from origianl input.
     '''
 
     # Add the created input.
     self.inputs[label].append(np.array(input))
+
+class ArchiveMinDist(ArchiveBase):
+  '''An archive class that only stores the inputs with mininum distances.'''
+
+  def __init__(self, input, label):
+    '''Create a archive.
+    
+    Args:
+      input: An initial input.
+      label: A label that the initial input classified into.
+    '''
+    
+    super(ArchiveMinDist, self).__init__(input, label)
+
+    self.min_dist = defaultdict(float)
+
+  def append(self, input, label, dist):
+    '''Append a created input.
+
+    Args:
+      input: A created input.
+      label: A label that the created input classified into.
+      dist: A distance (e.g. l2 distance) from origianl input.
+    '''
+
+    # If a found input is firstly found input.
+    if len(self.inputs[label]) == 0:
+      self.min_dist[label] == dist
+      self.inputs[label].append(np.array(input))
+
+    # If there are already inputs found with the given label.
+    else:
+      
+      # If a newly found input has mininum distance.
+      if self.min_dist[label] > dist:
+        self.min_dist[label] = dist
+        self.inputs[label][0] = np.array(input)
