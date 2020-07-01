@@ -483,6 +483,6 @@ class AdaptiveParameterizedStrategy(ParameterizedStrategy):
     self.strategies = self.strategies[:self.size]
 
     # Get the next strategy.
-    self.strategiy = self.strategies.pop(0)
+    self.strategy = self.strategies.pop(0)
 
     return self

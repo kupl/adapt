@@ -18,7 +18,7 @@ class WhiteBoxFuzzer:
   This fuzzer will test one input.
   '''
 
-  def __init__(self, network, input, metric=None, strategy=None, k=10, delta=0.2, class_weight=0.5, neuron_weight=0.5, lr=0.1, trail=3, decode=None):
+  def __init__(self, network, input, metric=None, strategy=None, k=10, delta=0.5, class_weight=0.5, neuron_weight=0.5, lr=0.1, trail=3, decode=None):
     '''Create a fuzzer.
     
     Create a white-box fuzzer. All parameters except for the time budget, should
@@ -33,7 +33,7 @@ class WhiteBoxFuzzer:
         the `adapt.strategy.RandomStrategy`.
       k: A positive integer. The number of the neurons to select.
       delta: A positive floating point number. Limits of distance of created
-        inputs.
+        inputs. By default, use 0.5.
       class_weight: A floating point number. A weight for the class term in
         optimization equation. By default, use 0.5.
       neuron_weight: A floating point number. A weight for the neuron term in
@@ -53,7 +53,7 @@ class WhiteBoxFuzzer:
       network = Network(network)
     self.network = network
 
-    self.input = input
+    self.input = np.array(input)
 
     if not metric:
       metric = NeuronCoverage(0.5)
@@ -187,8 +187,11 @@ class WhiteBoxFuzzer:
             # Add created input.
             self.archive.add(input, label, distance, timer.elapsed.total_seconds(), new_cov)
 
-            # Check timeout
+            # Check timeout.
             timer.check_timeout()
+
+        # Update strategy.
+        self.strategy.next()
 
     except Timeout:
       pass
@@ -199,7 +202,8 @@ class WhiteBoxFuzzer:
     # Update meta variables.
     self.coverage = coverage(self.covered)
     self.start_time = timer.start_time
-    self.time_consumed = int(timer.elapsed.total_seconds())
+    self.time_consumed = timer.elapsed.total_seconds()
+    self.archive.timestamp.append((self.time_consumed, self.coverage))
 
     if verbose > 0:
       print('Done!')
