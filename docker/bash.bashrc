@@ -3,7 +3,7 @@ if [ -z "$PS1" ] ; then
   return 
 fi
 
-export PS1="\[\033[01;32m\]adapt-docker@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$"
+export PS1="\[\033[01;32m\]adapt-docker@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
 export TERM=xterm-256color
 alias grep="grep --color=auto"
 alias ls="ls --color=auto"
