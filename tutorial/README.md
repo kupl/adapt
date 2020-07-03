@@ -10,7 +10,7 @@ $ cd /path/to/adapt/tutorial
 $ docker run -v $(pwd):/workspace -u $(id -u):$(id -g) -p 8888:8888 adapt
 ```
 
-## Jupyter Notebook with virtual environment
+## Jupyter Notebook with Virtual Environment
 You can see the installation of jupyter notebook at [here](../README.md#Jupyter-notebook).
 After, the following command will launch a jupyter notebook server.
 ```bash
