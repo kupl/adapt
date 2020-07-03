@@ -5,6 +5,7 @@ in [Effective White-Box Testing for Deep Neural Networks with Adaptive Neuron-Se
 ## Docker
 ADAPT offers a docker image with pre-installed ADAPT at [Docker Hub](https://hub.docker.com/r/koreaunivpl/adapt).
 If you want to install docker, please see [here](https://docs.docker.com/get-docker/).
+Instructions for GPU support for Docker can be found in [here](https://github.com/NVIDIA/nvidia-docker).
 Following command will download an image.
 ```bash
 $ docker pull koreaunivpl/adapt
@@ -43,8 +44,8 @@ $ cd adapt
 ADAPT uses [Tensorflow 2.0](https://www.tensorflow.org/). To install Tensorflow 2.0, you need a ```pip>=19.0```.
 The following commands will create a virtual environment and update ```pip``` with the Ubuntu machine.
 If you successfully create a virtual environment, your shell will be prefixed by ```(venv)```.
-*Updating system ```pip``` using ```pip``` can cause some [problems](https://github.com/pypa/pip/issues/5599), so using virtual enviroment is **highly recommended**.
-More detailed instructions can be found in [here](https://www.tensorflow.org/install/pip).*
+*Updating system ```pip``` using ```pip``` can cause some [problems](https://github.com/pypa/pip/issues/5599), so using virtual enviroment is **highly recommended**.*
+More detailed instructions, including instructions about setting GPU acceleration, can be found in [here](https://www.tensorflow.org/install/pip).
 ``` bash
 $ sudo apt update
 $ sudo apt install python3-dev python3-pip python3-venv
