@@ -26,9 +26,11 @@ If no commands are pass to docker, jupyter notebook server will be launched. The
 $ docker run -v $(pwd)/tutorial:/workspace -u $(id -u):$(id -g) -p 8888:8888 koreaunivpl/adapt
 ```
 
-## Build docker image
-If you want to build your docker image by yourself, the following command will create a docker image with a tag of ```adapt```.
+### Build docker image
+If you want to build your docker image by yourself, the following command will download this repository and create a docker image with a tag of ```adapt```.
 ```bash
+$ git clone https://github.com/kupl/adapt.git
+$ cd adapt
 $ docker build . --tag adapt
 ```
 
