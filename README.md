@@ -23,6 +23,7 @@ To open a bash using the docker image, use the following command.
 $ docker run --rm -it koreaunivpl/adapt bash
 ```
 If no commands are pass to docker, jupyter notebook server will be launched. The command will open a server at [http://localhost:8888/](http://localhost:8888).
+*If you are using a server, replace localhost with the ip address (or domain) of your server.*
 ```bash
 $ docker run -p 8888:8888 koreaunivpl/adapt
 ```
@@ -70,6 +71,8 @@ The following command will install jupyter notebook in your virtual environment.
 To launch jupyter notebook server, type the following command.
 ```bash
 (venv) $ jupyter notebook
+# If you are using a server machine, use following command instead of above one, and visit http://(your server's ip address or domain):8888.
+(venv) $ jupyter notebook --ip 0.0.0.0
 ```
 If your machine have jupyter notebook installed in system-wide, you can install a kernel with the following commands.
 ```bash
