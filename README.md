@@ -13,8 +13,7 @@ You can see the downloaded image with the following command.
 ```
 $ docker images
 REPOSITORY              TAG                           IMAGE ID            CREATED             SIZE
-koreaunivpl/adapt       latest                        75a8683099f0        15 minutes ago      4GB
-...
+koreaunivpl/adapt       latest                        ...
 ```
 
 ### Docker container
