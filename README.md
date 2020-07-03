@@ -2,31 +2,43 @@
 ADAPT is the open source white-box testing framework for deep neural networks, which first introduced
 in [Effective White-Box Testing for Deep Neural Networks with Adaptive Neuron-Selection Strategy](http://prl.korea.ac.kr/~pronto/home/papers/issta20.pdf).
 
-## Download
+## Docker
+ADAPT offers a docker image with pre-installed ADAPT at [Docker Hub](https://hub.docker.com/r/koreaunivpl/adapt).
+If you want to install docker, please see [here](https://docs.docker.com/get-docker/).
+Following command will download an image.
+```bash
+$ docker pull koreaunivpl/adapt
+```
+You can see the downloaded image with the following command.
+```
+$ docker images
+REPOSITORY              TAG                           IMAGE ID            CREATED             SIZE
+koreaunivpl/adapt       latest                        75a8683099f0        15 minutes ago      4GB
+...
+```
+
+### Docker container
+To open a bash using the docker image, use the following command.
+```bash
+$ docker run -it -v $(pwd)/tutorial:/workspace -u $(id -u):$(id -g) koreaunivpl/adapt adapt bash
+```
+If no commands are pass to docker, jupyter notebook server will be launched. The command will open a server at [http://localhost:8888/](http://localhost:8888).
+```bash
+$ docker run -v $(pwd)/tutorial:/workspace -u $(id -u):$(id -g) -p 8888:8888 koreaunivpl/adapt
+```
+
+## Build docker image
+If you want to build your docker image by yourself, the following command will create a docker image with a tag of ```adapt```.
+```bash
+$ docker build . --tag adapt
+```
+
+## Local Installation
 Download this repository using git.
 ```bash
 $ git clone https://github.com/kupl/adapt.git
 $ cd adapt
 ```
-The following commands in this document will be executed inside the ```adapt``` folder.
-
-## Docker
-ADAPT offers a docker image with pre-installed ADAPT.
-If you want to install docker, please see [here](https://docs.docker.com/get-docker/).
-Following command will create an image.
-```bash
-$ docker build . --tag adapt
-```
-To open a bash using the docker image, use the following command.
-```bash
-$ docker run -it -v $(pwd)/tutorial:/workspace -u $(id -u):$(id -g) adapt bash
-```
-If no commands are pass to docker, jupyter notebook server will be launched. The command will open a server at [http://localhost:8888/](http://localhost:8888).
-```bash
-$ docker run -v $(pwd)/tutorial:/workspace -u $(id -u):$(id -g) -p 8888:8888 adapt
-```
-
-## Local Installation
 ADAPT uses [Tensorflow 2.0](https://www.tensorflow.org/). To install Tensorflow 2.0, you need a ```pip>=19.0```.
 The following commands will create a virtual environment and update ```pip``` with the Ubuntu machine.
 If you successfully create a virtual environment, your shell will be prefixed by ```(venv)```.
