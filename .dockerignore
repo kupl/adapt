@@ -15,6 +15,3 @@ venv
 # Packaging
 adapt.egg-info
 build
-
-# Tutorial folder
-tutorial

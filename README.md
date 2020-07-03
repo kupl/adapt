@@ -20,11 +20,11 @@ koreaunivpl/adapt       latest                        ...
 ### Docker container
 To open a bash using the docker image, use the following command.
 ```bash
-$ docker run -it -v $(pwd)/tutorial:/workspace -u $(id -u):$(id -g) koreaunivpl/adapt adapt bash
+$ docker run --rm -it koreaunivpl/adapt bash
 ```
 If no commands are pass to docker, jupyter notebook server will be launched. The command will open a server at [http://localhost:8888/](http://localhost:8888).
 ```bash
-$ docker run -v $(pwd)/tutorial:/workspace -u $(id -u):$(id -g) -p 8888:8888 koreaunivpl/adapt
+$ docker run -p 8888:8888 koreaunivpl/adapt
 ```
 
 ### Build docker image
