@@ -37,7 +37,8 @@ $ docker build . --tag adapt
 ```
 
 ## Local Installation
-Download this repository using git.
+If you do not prefer docker, or want to implement your own idea based on ADAPT, you can install ADAPT in your local machine.
+First, download this repository using git.
 ```bash
 $ git clone https://github.com/kupl/adapt.git
 $ cd adapt
