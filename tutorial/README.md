@@ -6,8 +6,7 @@ The offered tutorials are based on jupyter notebook.
 Our docker image offers a pre-installed jupyter notebook.
 You can run a docker based jupyter notebook with the following commands.
 ```bash
-$ cd /path/to/adapt/tutorial
-$ docker run -v $(pwd):/workspace -u $(id -u):$(id -g) -p 8888:8888 adapt
+$ docker run -p 8888:8888 koreaunivpl/adapt
 ```
 
 ## Jupyter Notebook with Virtual Environment
