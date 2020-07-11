@@ -1,5 +1,5 @@
 # ADAPT
-ADAPT is the open source white-box testing framework for deep neural networks, which first introduced
+ADAPT is an open source white-box testing framework for deep neural networks, which first introduced
 in [Effective White-Box Testing for Deep Neural Networks with Adaptive Neuron-Selection Strategy](http://prl.korea.ac.kr/~pronto/home/papers/issta20.pdf).
 
 ## Docker
