@@ -21,5 +21,5 @@ The following table shows the contents of this folder.
 
 |                  File                  | Description                               |
 |:--------------------------------------:|:------------------------------------------|
-| [test_lenet5.ipynb](test_lenet5.ipynb) | Test LeNet-5 that trained for MNIST.      |
+| [test_lenet5.ipynb](test_lenet5.ipynb) | Test LeNet-5 that is trained for MNIST.   |
 | [test_vgg19.ipynb](test_vgg19.ipynb)   | Test VGG-19 provided by Tensorflow/Keras. |
