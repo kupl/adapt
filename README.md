@@ -3,29 +3,29 @@ ADAPT is an open source white-box testing framework for deep neural networks, wh
 in [Effective White-Box Testing for Deep Neural Networks with Adaptive Neuron-Selection Strategy](http://prl.korea.ac.kr/~pronto/home/papers/issta20.pdf).
 
 ## Docker
-ADAPT offers a docker image with pre-installed ADAPT at [Docker Hub](https://hub.docker.com/r/koreaunivpl/adapt).
+ADAPT offers a docker image with pre-installed ADAPT.
 If you want to install docker, please see [here](https://docs.docker.com/get-docker/).
 Instructions for GPU support for Docker can be found in [here](https://github.com/NVIDIA/nvidia-docker).
 Following command will download an image.
 ```bash
-$ docker pull koreaunivpl/adapt
+$ docker pull ghcr.io/kupl/adapt
 ```
 You can see the downloaded image with the following command.
 ```
 $ docker images
 REPOSITORY              TAG                           IMAGE ID            CREATED             SIZE
-koreaunivpl/adapt       latest                        ...
+ghcr.io/kupl/adapt       latest                        ...
 ```
 
 ### Docker container
 To open a bash using the docker image, use the following command.
 ```bash
-$ docker run --rm -it koreaunivpl/adapt bash
+$ docker run --rm -it ghcr.io/kupl/adapt bash
 ```
 If no commands are pass to docker, jupyter notebook server will be launched. The command will open a server at [http://localhost:8888/](http://localhost:8888).
 *If you are using a server, replace localhost with the ip address (or domain) of your server.*
 ```bash
-$ docker run -p 8888:8888 koreaunivpl/adapt
+$ docker run -p 8888:8888 ghcr.io/kupl/adapt
 ```
 
 ### Build docker image
