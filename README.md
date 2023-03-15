@@ -14,7 +14,7 @@ You can see the downloaded image with the following command.
 ```
 $ docker images
 REPOSITORY              TAG                           IMAGE ID            CREATED             SIZE
-ghcr.io/kupl/adapt       latest                        ...
+ghcr.io/kupl/adapt      latest                        ...
 ```
 
 ### Docker container
